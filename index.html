@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rock Paper Scissors</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="gamehead">
+  <a href="../index3.html" class="homebut">← Back to Portfolio</a>
+  <h1>Rock Paper Scissors</h1>
+  <p class="subtitle">Challenge the computer and track your wins!</p>
+</header>
+
+<div class="moves">
+  <button class="movebut" data-move="rock"><img src="images/rock-emoji.png" alt="rock"></button>
+  <button class="movebut" data-move="paper"><img src="images/paper-emoji.png" alt="paper"></button>
+  <button class="movebut" data-move="scissors"><img src="images/scissors-emoji.png" alt="scissors"></button>
+</div>
+
+<div class="result-display">
+  <p class="jsresult">Make your move!</p>
+  <div class="jsmoves"></div>
+</div>
+
+<div class="scoreboard">
+  <p class="jsscore"></p>
+  <p class="winstreak"></p>
+</div>
+
+<div class="controls">
+  <button class="autoplaybut">Auto Play</button>
+  <button class="resetbut">Reset Score</button>
+</div>
+
+<div class="historypan">
+  <h3>History</h3>
+  <ul class="historylist"></ul>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
