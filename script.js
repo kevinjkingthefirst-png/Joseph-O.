@@ -1,44 +1,67 @@
-document.querySelectorAll('.fadeup').forEach(block => {
-  const check = () => {
-    if (block.getBoundingClientRect().top < innerHeight - 100) {
-      block.classList.add('show');
-    }
-  };
-  check();
-  addEventListener('scroll', check);
-});
+let todoList = JSON.parse(localStorage.getItem('todos')) || [];
 
-const toggle = document.getElementById('themeTog');
-toggle.onclick = () => {
-  document.body.classList.toggle('light');
-  toggle.textContent = document.body.classList.contains('light') ? '☀️' : '🌙';
-};
+renderTodoList();
 
-document.querySelectorAll('.track div').forEach(bar => {
-  setTimeout(() => {
-    bar.style.width = bar.dataset.level + '%';
-  }, 400);
-});
+function renderTodoList() {
+  const listEl = document.querySelector('.js-todo-list');
+  listEl.innerHTML = '';
 
-document.querySelectorAll('.workbox').forEach(box => {
-  box.onclick = () => location.href = box.dataset.link;
-});
+  todoList.forEach((todo, index) => {
+    const div = document.createElement('div');
+    div.className = `todo-item ${todo.completed ? 'completed' : ''}`;
 
-const burger = document.getElementById('burgerBut');
-const phoneMenu = document.querySelector('.phonemenu');
+    div.innerHTML = `
+      <div>
+        <div class="todo-name">${todo.name}</div>
+        <div class="todo-date">${formatDate(todo.dueDate)}</div>
+      </div>
+      <button class="complete-btn">✔</button>
+      <button class="delete-btn">✖</button>
+    `;
 
-burger.onclick = () => {
-  phoneMenu.classList.toggle('open');
-};
+    div.querySelector('.complete-btn').onclick = () => {
+      todo.completed = !todo.completed;
+      saveAndRender();
+    };
 
-phoneMenu.querySelectorAll('a').forEach(link => {
-  link.onclick = () => phoneMenu.classList.remove('open');
-});
+    div.querySelector('.delete-btn').onclick = () => {
+      todoList.splice(index, 1);
+      saveAndRender();
+    };
 
-phoneMenu.querySelectorAll('a').forEach(link => {
-  link.onclick = () => {
-    phoneMenu.querySelectorAll('a').forEach(l => l.classList.remove('active'));
-    link.classList.add('active');
-    phoneMenu.classList.remove('open');
-  };
+    listEl.appendChild(div);
+  });
+}
+
+function addTodo() {
+  const nameInput = document.querySelector('.js-name-input');
+  const dateInput = document.querySelector('.js-date-input');
+
+  if (!nameInput.value) return;
+
+  todoList.push({
+    name: nameInput.value,
+    dueDate: dateInput.value,
+    completed: false
+  });
+
+  nameInput.value = '';
+  dateInput.value = '';
+
+  saveAndRender();
+}
+
+function saveAndRender() {
+  localStorage.setItem('todos', JSON.stringify(todoList));
+  renderTodoList();
+}
+
+function formatDate(date) {
+  if (!date) return '';
+  return new Date(date).toLocaleDateString();
+}
+
+document.querySelector('.js-add-btn').onclick = addTodo;
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') addTodo();
 });
